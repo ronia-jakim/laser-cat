@@ -1,4 +1,4 @@
-rm -f main
+#rm -f main
 
 dune build
 
