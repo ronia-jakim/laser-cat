@@ -16,6 +16,7 @@ chmod +x build.sh
 `P` to pause game, `Esc` to exit.
 
 <p style="text-align: center;">
+teeest
 ![kotek](/img/cat_running_01.png "Kotek")
 </p>
 
