@@ -15,7 +15,7 @@ chmod +x build.sh
 
 `P` to pause game, `Esc` to exit.
 
-![kotek](/img/cat_running_01.png "Kotek")
+![kotek](/img/cat_running_04.png "Kotek")
 
 ## Dependencies
 
