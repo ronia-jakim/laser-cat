@@ -16,3 +16,8 @@ val return_sprite : player_object -> Sprite.sprite
 val add_points : player_object -> player_object
 
 val change_texture : player_object -> string -> player_object 
+
+val return_x : player_object -> float 
+val return_y : player_object -> float 
+
+val return_radius_texture : player_object -> float 

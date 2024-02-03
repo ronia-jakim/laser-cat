@@ -107,3 +107,8 @@ let change_texture player new_path =
       distance = player.distance;
     }
   in p
+
+let return_x p = Sprite.return_x p.backbone 
+let return_y p = Sprite.return_y p.backbone
+
+let return_radius_texture p = Sprite.return_radius_texture p.backbone

@@ -1,5 +1,5 @@
-let width = 720
-let height = 405
+let width = 960
+let height = 540
 
 let setup () = 
   Raylib.init_window width height "laserowy kotek";
@@ -10,7 +10,7 @@ let setup () =
     Sprite.Stationary
     2.0
     "img/cat_running_01.png"
-    0.4 
+    0.45 
     0
     0.0 
     0.5
@@ -78,7 +78,7 @@ let setup () =
 
   Raylib.set_target_fps 60;
 
-  (false, player, back_img, pieski, monetki, false, 0)
+  (false, player, back_img, pieski, monetki, false, 0, 0)
 
 
 let draw_UI dst pts paused ended = 
@@ -164,8 +164,68 @@ let change_money m =
   else  
     m
 
+let laser start_laser end_laser = 
+    Raylib.draw_line_ex 
+      start_laser 
+      end_laser 
+      8.0
+      (Raylib.color_alpha Raylib.Color.green 0.6); 
+    Raylib.draw_line_ex 
+      start_laser 
+      end_laser 
+      3.0
+      Raylib.Color.white 
 
-let rec loop (paused, player, back_img, pieski, monetki, ended, frame_count) = 
+let check_hit_piesek rect pieski = 
+  if Sprite.check_collision_rec (Piesek.return_sprite pieski) rect
+  then 
+    Piesek.renew_piesek pieski 
+  else 
+    pieski
+
+
+let draw_laser player pieski attack =
+  let start_x = 
+    ((Player.return_x player) +. (Player.return_radius_texture player) +. 30.0)
+  in
+
+  let start_y = 
+    ((Player.return_y player) +. (Player.return_radius_texture player) -. 15.0)
+  in
+
+  let start_laser = Raylib.Vector2.create 
+    start_x
+    start_y
+  in 
+
+  let end_laser = Raylib.Vector2.create 
+    (Float.of_int (Raylib.get_screen_width () + 10))
+    start_y
+  in 
+
+  if attack > 0
+  then 
+    laser start_laser end_laser;
+
+  let laser_rectangle = Raylib.Rectangle.create 
+                          start_x 
+                          (start_y -. 10.0) 
+                          ((Float.of_int (Raylib.get_screen_width ())) -. start_x)
+                          20.0 
+  in 
+
+  let pieski = 
+    if attack > 0 
+    then List.map (check_hit_piesek laser_rectangle) pieski 
+    else 
+      pieski
+  in 
+  pieski
+    
+
+
+
+let rec loop (paused, player, back_img, pieski, monetki, ended, frame_count, attack) = 
   match Raylib.window_should_close () with 
   | true -> Raylib.close_window () 
   | false ->
@@ -174,6 +234,7 @@ let rec loop (paused, player, back_img, pieski, monetki, ended, frame_count) =
 
       let back_img = Back.move_back back_img
       in 
+      
 
       let pieski = 
         if not paused && not ended 
@@ -209,6 +270,9 @@ let rec loop (paused, player, back_img, pieski, monetki, ended, frame_count) =
       let monetki = List.map change_money monetki 
       in
 
+      let pieski = draw_laser player pieski attack 
+      in
+      
       let frame_count = 
         if frame_count < 60
         then 
@@ -234,6 +298,23 @@ let rec loop (paused, player, back_img, pieski, monetki, ended, frame_count) =
       in 
       let curr_points = Player.return_points player 
       in 
+
+      let attack = 
+        if Raylib.is_key_pressed Raylib.Key.H 
+        then 
+          if not paused 
+          then 
+            20 
+          else 
+            attack 
+        else
+          if attack > 0 
+          then 
+            attack - 1
+          else 
+            0 
+      in
+
       
       let paused = 
         if Raylib.is_key_pressed Raylib.Key.P 
@@ -249,6 +330,6 @@ let rec loop (paused, player, back_img, pieski, monetki, ended, frame_count) =
       in
 
       Raylib.end_drawing ();
-      loop (paused, player, back_img, pieski, monetki, ended, frame_count) 
+      loop (paused, player, back_img, pieski, monetki, ended, frame_count, attack) 
 
 let () = setup () |> loop

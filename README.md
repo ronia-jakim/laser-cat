@@ -11,7 +11,7 @@ chmod +x build.sh
 
 ## Playing
 
-`Space` to jump, hold `Space` to fall slower. 
+`Space` to jump, hold `Space` to fall slower. Pressing `H` turns on laser in Kycia's eyes.
 
 `P` to pause game, `Esc` to exit.
 

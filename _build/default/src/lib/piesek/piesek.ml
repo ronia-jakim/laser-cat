@@ -96,3 +96,10 @@ let draw_paused pies =
     pies 
 
 let return_sprite pies = pies.back
+
+let renew_piesek pies = 
+  let potential_x = (Float.of_int (Raylib.get_screen_width () + 100))
+  in 
+  let potential_y = (Float.of_int ( (Random.int (Raylib.get_screen_height () - 30)) + 15 ))
+  in
+    init_piesek potential_x potential_y Jump (Sprite.return_speedY pies.back) pies.path (Sprite.return_scale pies.back) 

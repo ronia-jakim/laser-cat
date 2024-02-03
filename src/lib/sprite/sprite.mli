@@ -27,6 +27,7 @@ val change_speedY : sprite -> float -> sprite
 val change_speedX : sprite -> float -> sprite 
 
 val check_collision : sprite -> sprite -> bool
+val check_collision_rec : sprite -> Raylib.Rectangle.t -> bool
 
 val draw_paused : sprite -> sprite 
 val draw_paused_unit : sprite -> unit
@@ -36,3 +37,6 @@ val return_scale : sprite -> float
 val return_speedY : sprite -> float
 
 val change_texture : sprite -> string -> sprite 
+
+val return_radius_texture : sprite -> float
+

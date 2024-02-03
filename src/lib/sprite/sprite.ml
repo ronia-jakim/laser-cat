@@ -282,3 +282,7 @@ let change_texture sp new_texture_path =
   }
   in p
 
+let return_radius_texture sp = sp.radius
+
+let check_collision_rec sp rect = 
+  Raylib.check_collision_circle_rec sp.collider sp.radius_texture rect

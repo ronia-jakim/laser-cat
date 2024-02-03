@@ -29,7 +29,7 @@ let place_texture txt pos =
     0.0 
   in
   let back_vec_2 = Raylib.Vector2.create 
-    (pos +. (3.0 *. (Float.of_int (Raylib.Texture2D.width txt)))) 
+    (pos +. (4.0 *. (Float.of_int (Raylib.Texture2D.width txt)))) 
     0.0
   in
     
@@ -37,19 +37,19 @@ let place_texture txt pos =
       txt 
       back_vec_1
       0.0 
-      3.0 
+      4.0 
       Raylib.Color.white ;
   Raylib.draw_texture_ex 
       txt
       back_vec_2
       0.0 
-      3.0 
+      4.0 
       Raylib.Color.white
 
 let move_back (b : background) = 
   let new_back = {
     position_back = 
-      if b.position_back <= -3.0 *. (Float.of_int (Raylib.Texture2D.width b.texture_back) )
+      if b.position_back <= -4.0 *. (Float.of_int (Raylib.Texture2D.width b.texture_back) )
       then 
         0.0
       else 
@@ -57,7 +57,7 @@ let move_back (b : background) =
     texture_back = b.texture_back;
 
     position_mid = 
-      if b.position_mid <= -3.0 *. (Float.of_int (Raylib.Texture2D.width b.texture_mid) )
+      if b.position_mid <= -4.0 *. (Float.of_int (Raylib.Texture2D.width b.texture_mid) )
       then 
         0.0
       else 
@@ -65,7 +65,7 @@ let move_back (b : background) =
     texture_mid = b.texture_mid;
 
     position_fore = 
-      if b.position_fore <= -3.0 *. (Float.of_int (Raylib.Texture2D.width b.texture_fore))
+      if b.position_fore <= -4.0 *. (Float.of_int (Raylib.Texture2D.width b.texture_fore))
       then 
         0.0 
       else 
