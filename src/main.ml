@@ -6,13 +6,14 @@ let setup () =
 
   let player = Player.create 
     80.0 
-    (2.0 *. (Float.of_int (Raylib.get_screen_height () / 3 + 20)))
+    (2.0 *. (Float.of_int (Raylib.get_screen_height () / 3 - 10)))
     Sprite.Stationary
     2.0
-    "img/cat.png"
-    0.03 
+    "img/cat_running_01.png"
+    0.4 
     0
     0.0 
+    0.5
   in 
 
   let back_img = Back.init_back "img/background.png" "img/midground.png" "img/foreground.png"
@@ -77,7 +78,7 @@ let setup () =
 
   Raylib.set_target_fps 60;
 
-  (false, player, back_img, pieski, monetki, false)
+  (false, player, back_img, pieski, monetki, false, 0)
 
 
 let draw_UI dst pts paused ended = 
@@ -164,7 +165,7 @@ let change_money m =
     m
 
 
-let rec loop (paused, player, back_img, pieski, monetki, ended) = 
+let rec loop (paused, player, back_img, pieski, monetki, ended, frame_count) = 
   match Raylib.window_should_close () with 
   | true -> Raylib.close_window () 
   | false ->
@@ -208,9 +209,26 @@ let rec loop (paused, player, back_img, pieski, monetki, ended) =
       let monetki = List.map change_money monetki 
       in
 
+      let frame_count = 
+        if frame_count < 60
+        then 
+          frame_count + 1
+        else 0
+      in 
 
-
-
+      let player = 
+        if frame_count <= 14 
+        then 
+          Player.change_texture player "img/cat_running_01.png"
+        else if frame_count <= 29 
+        then 
+          Player.change_texture player "img/cat_running_02.png"
+        else if frame_count <= 44
+        then 
+          Player.change_texture player "img/cat_running_03.png"
+        else 
+          Player.change_texture player "img/cat_running_04.png" 
+      in 
 
       let curr_distance = Player.return_distance player 
       in 
@@ -231,6 +249,6 @@ let rec loop (paused, player, back_img, pieski, monetki, ended) =
       in
 
       Raylib.end_drawing ();
-      loop (paused, player, back_img, pieski, monetki, ended) 
+      loop (paused, player, back_img, pieski, monetki, ended, frame_count) 
 
 let () = setup () |> loop

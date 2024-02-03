@@ -7,7 +7,7 @@ type sprite
 
 
 (* pos_x pos_y dir_x dir_y s_x s_y texture scale *)
-val create : float -> float -> bool -> move_direction -> float -> float -> string -> float -> sprite
+val create : float -> float -> bool -> move_direction -> float -> float -> string -> float -> float -> sprite
 
 val move : sprite -> sprite
 
@@ -34,3 +34,5 @@ val draw_paused_unit : sprite -> unit
 val return_scale : sprite -> float
 
 val return_speedY : sprite -> float
+
+val change_texture : sprite -> string -> sprite 

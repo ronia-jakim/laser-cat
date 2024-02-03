@@ -5,7 +5,7 @@ type player_object = {
   distance : float;
 }
 
-let create pos_x pos_y dir_y s_y txt_path s p dst = 
+let create pos_x pos_y dir_y s_y txt_path s p dst txt_radius = 
   let spr = Sprite.create
                 pos_x 
                 pos_y 
@@ -15,6 +15,7 @@ let create pos_x pos_y dir_y s_y txt_path s p dst =
                 s_y
                 txt_path
                 s
+                txt_radius
   in 
   let pl = 
     {
@@ -38,7 +39,7 @@ let move player =
         else 
           Sprite.Fall 
     | Fall -> 
-        if (Sprite.return_y player.backbone) >= 2.0 *. (Float.of_int (Raylib.get_screen_height () / 3 + 20))
+        if (Sprite.return_y player.backbone) >= 2.0 *. (Float.of_int (Raylib.get_screen_height () / 3 - 10))
         then 
           Sprite.Stationary 
         else 
@@ -97,3 +98,12 @@ let add_points player=
     }
   in new_player
 
+let change_texture player new_path = 
+  let p = 
+    {
+      backbone = Sprite.change_texture player.backbone new_path;
+
+      points = player.points; 
+      distance = player.distance;
+    }
+  in p

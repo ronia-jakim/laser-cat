@@ -16,15 +16,17 @@ type sprite =
 
     texture_path : string;
     static_texture : Raylib.Texture2D.t' Raylib.ctyp;
+
     
     scale : float;
 
     (*collider : Raylib.Rectangle.t' Raylib.ctyp;*)
     collider : Raylib.Vector2.t' Raylib.ctyp;
     radius : float;
+    radius_texture : float;
   }
 
-let create pos_x pos_y dir_x dir_y s_x s_y txt_path s = 
+let create pos_x pos_y dir_x dir_y s_x s_y txt_path s txt_radius = 
   let texture = Raylib.load_texture txt_path 
   in 
 
@@ -40,8 +42,8 @@ let create pos_x pos_y dir_x dir_y s_x s_y txt_path s =
   in*) 
 
   let coll = Raylib.Vector2.create 
-    (pos_x +. (0.5 *. d))
-    (pos_y +. (0.5 *. d))
+    (pos_x +. 0.5 *. d)
+    (pos_y +. 0.5 *. d)
   in 
 
 
@@ -63,6 +65,7 @@ let create pos_x pos_y dir_x dir_y s_x s_y txt_path s =
 
       collider = coll;
       radius = d /. 2.0;
+      radius_texture = (d /. 2.0) *. txt_radius;
     }
   in new_sprite
 
@@ -73,6 +76,12 @@ let draw_sprite sp pos_vec =
     0.0
     sp.scale 
     Raylib.Color.white
+
+  (*Raylib.draw_circle
+    (int_of_float (Raylib.Vector2.x sp.collider))
+    (int_of_float (Raylib.Vector2.y sp.collider))
+    sp.radius_texture 
+    (Raylib.color_alpha Raylib.Color.green 0.5)*)
 
 let draw_paused_unit sp = 
   let pos_vec = Raylib.Vector2.create 
@@ -89,7 +98,7 @@ let draw_paused sp =
   draw_sprite sp pos_vec;
   sp
   
-let move_coll new_x new_y = 
+let move_coll new_x new_y r = 
   (* let w = (Float.of_int (Raylib.Texture2D.width sp.static_texture)) *. sp.scale
   in
 
@@ -98,7 +107,7 @@ let move_coll new_x new_y =
   
   let coll = Raylib.Rectangle.create new_x new_y w h 
   in *) 
-  let coll = Raylib.Vector2.create new_x new_y 
+  let coll = Raylib.Vector2.create (new_x +. r) (new_y +. r)
   in 
   coll
 
@@ -137,8 +146,9 @@ let move sp =
     texture_path = sp.texture_path;
     static_texture = sp.static_texture;
     scale = sp.scale;
-    collider = move_coll new_x new_y;
+    collider = move_coll new_x new_y sp.radius;
     radius = sp.radius;
+    radius_texture = sp.radius_texture;
   }
   in 
   new_sp
@@ -169,8 +179,9 @@ let change_directionY sp new_dir =
     static_texture = sp.static_texture;
     scale = sp.scale;
 
-    collider = move_coll sp.x sp.y; 
+    collider = move_coll sp.x sp.y sp.radius; 
     radius = sp.radius;
+    radius_texture = sp.radius_texture;
   }
   in new_sp
 
@@ -189,8 +200,9 @@ let change_directionX sp new_dir =
     static_texture = sp.static_texture;
     scale = sp.scale;
 
-    collider = move_coll sp.x sp.y; 
+    collider = move_coll sp.x sp.y sp.radius; 
     radius = sp.radius;
+    radius_texture = sp.radius_texture;
   }
   in new_sp
 
@@ -209,8 +221,9 @@ let change_speedX sp new_sp =
     static_texture = sp.static_texture;
     scale = sp.scale;
 
-    collider = move_coll sp.x sp.y;
+    collider = move_coll sp.x sp.y sp.radius;
     radius = sp.radius;
+    radius_texture = sp.radius_texture;
   }
   in new_sp
 
@@ -230,8 +243,9 @@ let change_speedY sp new_sp =
     static_texture = sp.static_texture;
     scale = sp.scale;
 
-    collider = move_coll sp.x sp.y;
+    collider = move_coll sp.x sp.y sp.radius;
     radius = sp.radius;
+    radius_texture = sp.radius_texture;
   }
   in new_sp
 
@@ -239,6 +253,32 @@ let return_scale sp = sp.scale
 
 let check_collision sp1 sp2 = 
   (* Raylib.check_collision_recs sp1.collider sp2.collider *)
-  Raylib.check_collision_circles sp1.collider sp1.radius sp2.collider sp2.radius
+  Raylib.check_collision_circles sp1.collider sp1.radius_texture sp2.collider sp2.radius_texture
 
 let return_speedY sp = sp.speedY
+
+let change_texture sp new_texture_path = 
+  let new_texture = Raylib.load_texture new_texture_path 
+  in 
+
+  let p = {
+    x = sp.x;
+    y = sp.y; 
+
+    directionY = sp.directionY;
+    directionX = sp.directionX;
+
+    speedY = sp.speedY;
+    speedX = sp.speedX;
+
+    texture_path = new_texture_path; 
+    static_texture = new_texture;
+
+    scale = sp.scale;
+
+    collider = sp.collider;
+    radius = sp.radius;
+    radius_texture = sp.radius_texture;
+  }
+  in p
+

@@ -23,6 +23,7 @@ let init_pieniadz pos_x pos_y s_y txt_path s =
     s_y 
     txt_path 
     s 
+    1.0
   in 
 
   let pieniadz = {

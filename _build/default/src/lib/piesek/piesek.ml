@@ -21,6 +21,7 @@ let init_piesek pos_x pos_y dir_y s_y txt_path s =
     s_y 
     txt_path 
     s 
+    1.0
   in 
 
   let pies = {
